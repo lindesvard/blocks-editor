@@ -1,0 +1,31 @@
+import React, { memo } from "react";
+import { BlockOptions } from "./types";
+import AddBlockButton from "./ui/AddBlockButton";
+export { createParagraph } from "./blocks/createParagraph";
+
+type ActionsProps = {
+  blocks: Array<BlockOptions>;
+  addContent: (block: BlockOptions) => void;
+};
+
+function Actions({ blocks, addContent }: ActionsProps) {
+  return (
+    <div style={{ display: "flex", flexDirection: "row", margin: "0 -5px" }}>
+      {blocks.map((block) => {
+        const {
+          button: { label, Icon },
+        } = block;
+        return (
+          <AddBlockButton
+            icon={<Icon color="#fff" />}
+            onClick={() => addContent(block)}
+          >
+            {label}
+          </AddBlockButton>
+        );
+      })}
+    </div>
+  );
+}
+
+export default memo(Actions);
