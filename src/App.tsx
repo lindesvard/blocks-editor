@@ -5,8 +5,10 @@ import { createParagraph } from "Editor/blocks/createParagraph";
 import { createEmbed } from "Editor/blocks/createEmbed";
 import { createMedia } from "Editor/blocks/createMedia";
 import { createRanking } from "Editor/blocks/createRanking";
+import { createEditor } from "Editor/blocks/createEditor";
 
 const blocks = [
+  createEditor(),
   createParagraph({
     // bold: true,
     // preview: true,
