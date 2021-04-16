@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Image as IconImage, CaretCircleDown, Eraser } from "phosphor-react";
+import { Image as IconImage, WarningCircle } from "phosphor-react";
 import { uploadMedia } from "./upload";
 import styled from "styled-components";
 import { Column, Row } from "Editor/ui/Structure";
 import Text from "Editor/ui/Text";
-import { ButtonTransparent } from "Editor/ui/ButtonTransparent";
 
 const Item = styled.div<{ last?: boolean }>`
   border-bottom: ${(props) => (props.last ? 0 : 1)}px solid #c4c4c4;
@@ -116,20 +115,20 @@ export function PendingMediaItem({
   // Design: https://dribbble.com/shots/13923816-Add-product-cards/attachments/5533851?mode=media
   return (
     <Item last={last}>
-      <Row>
-        <Row alignItems="center">
-          <Column style={{ width: 50 }}>
-            {preview ? (
-              <Image src={preview} />
-            ) : (
-              <IconImage size={40} weight="duotone" />
-            )}
-          </Column>
-          <Column>
-            <Text style={{ marginBottom: 3 }}>{file.name}</Text>
-            {!isBase64(preview) && <Text size="small">{preview}</Text>}
-          </Column>
-        </Row>
+      <Row alignItems="center">
+        <Column style={{ width: 50 }}>
+          {preview ? (
+            <Image src={preview} />
+          ) : (
+            <IconImage size={40} weight="duotone" />
+          )}
+        </Column>
+        <Column mr="auto">
+          <Text mb={3}>{file.name}</Text>
+          {!isBase64(preview) && <Text size="small">{preview}</Text>}
+          {error && <Text size="small">Failed upload your asset</Text>}
+        </Column>
+        {error && <WarningCircle size={20} color="#ff5757" weight="duotone" />}
       </Row>
       {progress !== null && (
         <Progress progress={progress}>

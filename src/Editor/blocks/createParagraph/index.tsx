@@ -5,6 +5,7 @@ import Block from "../../ui/Block";
 import styled from "styled-components";
 import { Row } from "Editor/ui/Structure";
 import showdown from "showdown";
+import { Textarea } from "Editor/ui/Input";
 
 const converter = new showdown.Converter();
 
@@ -36,83 +37,6 @@ const ModeSeparator = styled.div`
   top: 1px;
   position: relative;
 `;
-
-type TextareaProps = {
-  onChange: (event: any) => void;
-  value: any;
-  minRows?: number;
-  maxRows?: number;
-  placeholder?: string;
-};
-
-function Textarea({
-  value = "",
-  minRows = 3,
-  maxRows = 20,
-  onChange,
-}: TextareaProps) {
-  const lineHeight = 20;
-  const padding = 20;
-  const [rows, setRows] = useState(minRows);
-  const input = useRef<HTMLTextAreaElement>(null);
-
-  const calculateRows = useCallback(() => {
-    if (!input.current) {
-      return minRows;
-    }
-
-    const previousRows = input.current.rows;
-    input.current.rows = minRows;
-
-    const currentRows = ~~(
-      (input.current.scrollHeight - padding * 2) /
-      lineHeight
-    );
-
-    if (currentRows === previousRows) {
-      input.current.rows = currentRows;
-    }
-
-    if (currentRows >= maxRows) {
-      input.current.rows = maxRows;
-      input.current.scrollTop = input.current.scrollHeight;
-    }
-
-    setRows(currentRows < maxRows ? currentRows : maxRows);
-  }, [minRows, maxRows]);
-
-  const handleChange = useCallback(
-    (event) => {
-      onChange(event);
-      calculateRows();
-    },
-    [calculateRows, onChange]
-  );
-
-  useEffect(() => {
-    calculateRows();
-  }, [calculateRows, value]);
-
-  return (
-    <textarea
-      rows={rows}
-      ref={input}
-      placeholder={"Enter your text here..."}
-      className={"textarea"}
-      onChange={handleChange}
-      style={{
-        lineHeight: `${lineHeight}px`,
-        minHeight: lineHeight * minRows,
-        width: "100%",
-        resize: "none",
-        border: 0,
-        outline: "none",
-        padding,
-      }}
-      value={value}
-    />
-  );
-}
 
 const ID = "paragraph";
 

@@ -9,15 +9,3 @@ export const getTweetId = (url: string) => {
   const splits = url.split("/");
   return splits[splits.length - 1].replaceAll("/", "");
 };
-
-export const getYoutubeId = (url: string) => {
-  let splits = url.split("=");
-  if (splits.length > 2) {
-    return splits[splits.length - 1].replaceAll("=", "");
-  }
-  splits = url.split("/");
-  if (splits.length > 2) {
-    return splits[splits.length - 1].replaceAll("/", "");
-  }
-  return "";
-};

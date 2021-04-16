@@ -4,7 +4,8 @@ import { BlockOptions, BlockOptionsIn, BlockProps } from "../../types";
 import Block from "../../ui/Block";
 import { Column, Row } from "Editor/ui/Structure";
 import { ButtonTransparent } from "Editor/ui/ButtonTransparent";
-import { Input } from "Editor/ui/Input";
+import { Input, Select, Textarea } from "Editor/ui/Input";
+import Text from "Editor/ui/Text";
 
 const ID = "playerCard";
 type Field = React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement> & {
@@ -23,24 +24,65 @@ type Model = {
   };
 };
 
-function Select({ options: fetchOptions, onChange, value }: Field) {
+function SelectWithOptions({ options: fetchOptions, onChange, value }: Field) {
+  const [loading, setLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<Array<{ key: string; value: string }>>(
     []
   );
   useEffect(() => {
     if (fetchOptions) {
-      fetchOptions().then(setOptions);
+      setLoading(true);
+      fetchOptions().then((response) => {
+        setOptions(response);
+        setLoading(false);
+      });
     }
   }, [fetchOptions]);
   return (
-    <select onChange={onChange} value={value}>
-      <option value="">Select something...</option>
+    <Select onChange={onChange} value={value}>
+      <option value="">{loading ? "Loading..." : "Select something..."}</option>
       {options.map(({ key, value }) => (
-        <option key={key} value={key} selected={value === key}>
+        <option key={key} value={key}>
           {value}
         </option>
       ))}
-    </select>
+    </Select>
+  );
+}
+
+function Rating({
+  value,
+  onChange,
+}: {
+  value: number;
+  onChange: (rate: number) => void;
+}) {
+  const [hover, setHover] = useState<number>(-1);
+  return (
+    <>
+      {[1, 2, 3, 4, 5].map((rate) => (
+        <ButtonTransparent
+          key={rate}
+          onMouseEnter={() => setHover(rate)}
+          onMouseLeave={() => setHover(-1)}
+          onClick={() => onChange(rate)}
+        >
+          <Star
+            size={50}
+            color={
+              hover !== -1
+                ? hover >= rate
+                  ? "#ffbb00"
+                  : "#999"
+                : value >= rate
+                ? "#ffbb00"
+                : "#999"
+            }
+            weight="duotone"
+          />
+        </ButtonTransparent>
+      ))}
+    </>
   );
 }
 
@@ -59,7 +101,11 @@ export function createRanking(
       return <Block title="Ranking" padding={20} />;
     }
 
-    const handleFieldChange = (id: string) => (event: any) => {
+    const handleFieldChange = (id: string) => (
+      event: React.ChangeEvent<
+        HTMLTextAreaElement | HTMLSelectElement | HTMLInputElement
+      >
+    ) => {
       const { value } = event.target;
       onUpdate(contentId, (prev) => ({
         ...prev,
@@ -86,43 +132,49 @@ export function createRanking(
             height: 100,
           }}
         >
-          {[1, 2, 3, 4, 5].map((rate) => (
-            <ButtonTransparent
-              key={rate}
-              onClick={() =>
-                onUpdate(contentId, (prev) => ({
-                  ...prev,
-                  star: rate,
-                }))
-              }
-            >
-              <Star
-                size={50}
-                color={currentRate >= rate ? "#ffbb00" : "#999"}
-                weight="duotone"
-              />
-            </ButtonTransparent>
-          ))}
+          <Rating
+            value={currentRate}
+            onChange={(rate) =>
+              onUpdate(contentId, (prev) => ({
+                ...prev,
+                star: rate,
+              }))
+            }
+          />
         </Row>
         <Row m={-10}>
-          {fields.map(({ id, ...field }) => (
-            <Column key={id} flex={1} m={10}>
-              {field.placeholder}
-              {field.type === "select" ? (
-                <Select
-                  {...{ id, ...field }}
-                  onChange={handleFieldChange(id)}
-                  value={data?.fields ? data?.fields[id] : ""}
-                />
-              ) : (
-                <Input
-                  {...field}
-                  onChange={handleFieldChange(id)}
-                  value={data?.fields ? data?.fields[id] : ""}
-                />
-              )}
-            </Column>
-          ))}
+          {fields.map(({ id, ...field }) => {
+            const value = data?.fields ? data?.fields[id] || "" : "";
+            return (
+              <Column key={id} flex={1} m={10}>
+                <Text size="small" color="light" mb={5}>
+                  {field.placeholder}
+                </Text>
+                {field.type === "textarea" && (
+                  <Textarea
+                    value={value}
+                    onChange={handleFieldChange(id)}
+                    placeholder="Hey, add some text!"
+                    border
+                  />
+                )}
+                {field.type === "select" && (
+                  <SelectWithOptions
+                    {...{ id, ...field }}
+                    onChange={handleFieldChange(id)}
+                    value={value}
+                  />
+                )}
+                {field.type === "text" && (
+                  <Input
+                    {...field}
+                    onChange={handleFieldChange(id)}
+                    value={value}
+                  />
+                )}
+              </Column>
+            );
+          })}
         </Row>
       </Block>
     );

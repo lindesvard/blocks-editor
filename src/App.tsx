@@ -7,29 +7,47 @@ import { createMedia } from "Editor/blocks/createMedia";
 import { createRanking } from "Editor/blocks/createRanking";
 
 const blocks = [
-  createParagraph({}),
-  createMedia({}),
+  createParagraph({
+    // bold: true,
+    // preview: true,
+    // italic: true,
+    // heading: true,
+    // list: true,
+    // advanced: true
+  }),
+  createMedia({
+    // async upload(file: File): Promise<string> => {}
+    // async remove(url: string) Promise<boolean> => {}
+    // async library(url: string) Promise<Array<string>> => {}
+  }),
   createEmbed({}),
   createRanking({
     button: {
       label: "Add player ranking",
     },
+    // StarIcon: ({ color, size, weight }) => <img src={} />
     fields: [
       {
         id: "player",
         placeholder: "Player",
         type: "select",
         async options() {
-          return [
-            { key: "1", value: "Haris Radetinac" },
-            { key: "2", value: "Magnus Eriksson" },
-          ];
+          return new Promise((resolve) => {
+            setTimeout(
+              () =>
+                resolve([
+                  { key: "1", value: "Haris Radetinac" },
+                  { key: "2", value: "Magnus Eriksson" },
+                ]),
+              2000
+            );
+          });
         },
       },
       {
         id: "description",
         placeholder: "Description",
-        type: "text",
+        type: "textarea",
       },
     ],
   }),
@@ -37,36 +55,36 @@ const blocks = [
 
 export default function App() {
   const [state, setState] = useEditorState([
-    {
-      contentId: "123",
-      blockId: "paragraph",
-      data: "Hello world",
-    },
-    {
-      blockId: "media",
-      contentId: "dmujrc3td",
-      data: [
-        "http://localhost:3000/uploads/media-1618603150060-437531441.png",
-        "http://localhost:3000/uploads/media-1618603153530-435359799.jpeg",
-      ],
-    },
-    {
-      blockId: "embed",
-      contentId: "pq3aryzac",
-      data: "https://twitter.com/mansomheterOve/status/1382917959925043201",
-    },
-    {
-      blockId: "playerCard",
-      contentId: "zxhmbjgwq",
-      data: {
-        star: 4,
-        fields: {
-          name: "a",
-          description: "b",
-          player: "",
-        },
-      },
-    },
+    // {
+    //   contentId: "123",
+    //   blockId: "paragraph",
+    //   data: "Hello world",
+    // },
+    // {
+    //   blockId: "media",
+    //   contentId: "dmujrc3td",
+    //   data: [
+    //     "http://localhost:3000/uploads/media-1618603150060-437531441.png",
+    //     "http://localhost:3000/uploads/media-1618603153530-435359799.jpeg",
+    //   ],
+    // },
+    // {
+    //   blockId: "embed",
+    //   contentId: "pq3aryzac",
+    //   data: "https://twitter.com/mansomheterOve/status/1382917959925043201",
+    // },
+    // {
+    //   blockId: "playerCard",
+    //   contentId: "zxhmbjgwq",
+    //   data: {
+    //     star: 4,
+    //     fields: {
+    //       name: "a",
+    //       description: "b",
+    //       player: "",
+    //     },
+    //   },
+    // },
   ]);
   const [counter, setCounter] = useState(0);
   return (

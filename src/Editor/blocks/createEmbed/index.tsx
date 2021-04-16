@@ -4,7 +4,7 @@ import { BlockOptions, BlockOptionsIn, BlockProps } from "../../types";
 import Block from "../../ui/Block";
 import { Input } from "Editor/ui/Input";
 import { Row } from "Editor/ui/Structure";
-import { getTweetId, getYoutubeId, validLink } from "./utils";
+import { getTweetId, validLink } from "./utils";
 import { isSoundcould, isTwitter, isYoutube } from "./source";
 
 import { TwitterTweetEmbed } from "react-twitter-embed";

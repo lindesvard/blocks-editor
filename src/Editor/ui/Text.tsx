@@ -2,8 +2,11 @@ import styled from "styled-components";
 
 const Text = styled.p<{
   size?: "default" | "small" | "medium" | "large";
+  color?: "default" | "light";
+  mb?: number;
   weight?: number;
 }>`
+  margin-bottom: ${(props) => props.mb || 0}px;
   font-size: ${(props) => {
     switch (props.size) {
       case "small":
@@ -17,6 +20,15 @@ const Text = styled.p<{
         return 24;
     }
   }}px;
+  color: ${(props) => {
+    switch (props.color) {
+      case "light":
+        return "#545454";
+      case "default":
+      default:
+        return "#222";
+    }
+  }};
   font-weight: ${(props) => props.weight || 400};
 `;
 
