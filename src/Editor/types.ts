@@ -5,22 +5,23 @@ export type BlockOptionsIn = {
   };
 };
 
-export type Data = unknown;
+export type Data = any;
 
-export type BlockOptions = {
+export type BlockOptions<T = Data> = {
   id: string;
   name: string;
   button: {
     label: string;
     Icon: React.ElementType;
   };
-  Block: React.ElementType<BlockProps>;
+  Block: React.ElementType<BlockProps<T>>;
+  initialData: T;
 };
 
-export type BlockProps = {
+export type BlockProps<T = Data> = {
   contentId: string;
-  onUpdate: (contentId: string, data: Data) => void;
-  data: Data;
+  onUpdate: (contentId: string, data: React.SetStateAction<T>) => void;
+  data: T;
 };
 
 export type EditorProps = {

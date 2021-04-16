@@ -1,7 +1,39 @@
 import React, { useState } from "react";
-import Editor, { createParagraph, createMedia, useEditorState } from "./Editor";
+import Editor, { useEditorState } from "./Editor";
 
-const blocks = [createParagraph({}), createMedia({})];
+import { createParagraph } from "Editor/blocks/createParagraph";
+import { createEmbed } from "Editor/blocks/createEmbed";
+import { createMedia } from "Editor/blocks/createMedia";
+import { createRanking } from "Editor/blocks/createRanking";
+
+const blocks = [
+  createParagraph({}),
+  createMedia({}),
+  createEmbed({}),
+  createRanking({
+    button: {
+      label: "Add player ranking",
+    },
+    fields: [
+      {
+        id: "player",
+        placeholder: "Player",
+        type: "select",
+        async options() {
+          return [
+            { key: "1", value: "Haris Radetinac" },
+            { key: "2", value: "Magnus Eriksson" },
+          ];
+        },
+      },
+      {
+        id: "description",
+        placeholder: "Description",
+        type: "text",
+      },
+    ],
+  }),
+];
 
 export default function App() {
   const [state, setState] = useEditorState([
@@ -9,6 +41,31 @@ export default function App() {
       contentId: "123",
       blockId: "paragraph",
       data: "Hello world",
+    },
+    {
+      blockId: "media",
+      contentId: "dmujrc3td",
+      data: [
+        "http://localhost:3000/uploads/media-1618603150060-437531441.png",
+        "http://localhost:3000/uploads/media-1618603153530-435359799.jpeg",
+      ],
+    },
+    {
+      blockId: "embed",
+      contentId: "pq3aryzac",
+      data: "https://twitter.com/mansomheterOve/status/1382917959925043201",
+    },
+    {
+      blockId: "playerCard",
+      contentId: "zxhmbjgwq",
+      data: {
+        star: 4,
+        fields: {
+          name: "a",
+          description: "b",
+          player: "",
+        },
+      },
     },
   ]);
   const [counter, setCounter] = useState(0);
@@ -20,7 +77,7 @@ export default function App() {
         margin: "0 auto",
       }}
     >
-      <button onClick={() => setCounter((prev) => prev + 1)}>
+      {/* <button onClick={() => setCounter((prev) => prev + 1)}>
         Counter: {counter}
       </button>
       <button
@@ -33,7 +90,7 @@ export default function App() {
       >
         Update random
       </button>
-      {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
+      <pre>{JSON.stringify(state, null, 2)}</pre> */}
       <Editor blocks={blocks} state={state} setState={setState} />
     </div>
   );

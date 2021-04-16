@@ -19,7 +19,7 @@ const Button = styled.button<{
     switch (props.variant) {
       case "primary":
       default:
-        return "#000";
+        return "linear-gradient(31deg, #000, #4e4f71);";
     }
   }};
   border: 0;
@@ -32,6 +32,7 @@ const Button = styled.button<{
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   svg  {
     font-size: 20px;
@@ -44,7 +45,7 @@ function getSize(size: ButtonSize): number {
     case "small":
       return 25;
     case "default":
-      return 35;
+      return 45;
   }
 }
 

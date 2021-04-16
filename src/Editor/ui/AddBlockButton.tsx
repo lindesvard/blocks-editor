@@ -7,13 +7,13 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button = styled.button`
-  background: #000;
+  background: linear-gradient(45deg, #51327d, #7e86ff);
   border: 0;
-  border-radius: 5px;
+  border-radius: 10px;
   line-height: 1;
-  height: 70px;
+  height: 80px;
   width: 100%;
-  max-width: 150px;
+  max-width: 180px;
   padding: 0 20px;
   color: #fff;
   display: flex;
@@ -21,6 +21,17 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   margin: 0 5px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  margin: 5px;
+
+  &:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  svg {
+    margin-bottom: 5px;
+  }
 `;
 
 function ButtonComponent({ icon, children, ...props }: ButtonProps) {
@@ -28,7 +39,7 @@ function ButtonComponent({ icon, children, ...props }: ButtonProps) {
     <Button {...props}>
       {icon &&
         React.cloneElement(icon, {
-          size: 30,
+          size: 25,
         })}
       {children}
     </Button>

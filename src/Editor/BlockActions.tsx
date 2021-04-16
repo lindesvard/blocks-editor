@@ -9,17 +9,21 @@ const Wrapper = styled.div`
 
   & div.actions {
     position: absolute;
-    top: 0;
-    left: 100%;
+    top: -10px;
+    right: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     opacity: 0;
-    transition: all 0.2s ease-in-out 0.25s;
-    /* transform: translate3d(-20px, 0, 0); */
+    transition: all 0.2s ease-in-out;
     padding-left: 10px;
 
     button {
-      margin-bottom: 5px;
+      margin-left: 5px;
+      transition: transform 0.2s ease-in-out;
+
+      &:hover {
+        transform: translate3d(0, -2px, 0);
+      }
     }
   }
 
@@ -63,11 +67,6 @@ function BlockActions({
           icon={<ArrowDown />}
           onClick={() => onMoveDown(contentId)}
         />
-        {/* <Button
-          size={"small"}
-          icon={<ArrowsOutCardinal />}
-          onClick={() => onMoveDown(contentId)}
-        /> */}
       </div>
       {children}
     </Wrapper>

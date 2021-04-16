@@ -4,9 +4,7 @@ import Actions from "./Actions";
 import BlockActions from "./BlockActions";
 import { swap } from "./utils/swap";
 import { id } from "./utils/id";
-import "./styles.css";
-export { createParagraph } from "./blocks/createParagraph";
-export { createMedia } from "./blocks/createMedia";
+import { Root } from "./ui/Root";
 export { useEditorState } from "./useEditorState";
 
 function Editor({ blocks, state, setState }: EditorProps) {
@@ -17,7 +15,7 @@ function Editor({ blocks, state, setState }: EditorProps) {
         {
           blockId: block.id,
           contentId: id(),
-          data: null,
+          data: block.initialData,
         },
       ]);
     },
@@ -25,14 +23,21 @@ function Editor({ blocks, state, setState }: EditorProps) {
   );
 
   const handleUpdate = useCallback(
-    (contentId: string, data: any) => {
+    (contentId: string, data: ((data: any) => void) | any) => {
       setState((prev) =>
         prev.map((map) => {
           if (map.contentId === contentId) {
-            return {
-              ...map,
-              data,
-            };
+            if (typeof data === "function") {
+              return {
+                ...map,
+                data: data(map.data),
+              };
+            } else {
+              return {
+                ...map,
+                data,
+              };
+            }
           }
 
           return map;
@@ -84,7 +89,7 @@ function Editor({ blocks, state, setState }: EditorProps) {
   );
 
   return (
-    <div className="editor">
+    <Root>
       {state.map(({ blockId, contentId, data }) => {
         const block = blocks.find((block) => block.id === blockId);
         if (!block) {
@@ -106,7 +111,7 @@ function Editor({ blocks, state, setState }: EditorProps) {
         );
       })}
       <Actions blocks={blocks} addContent={addContent} />
-    </div>
+    </Root>
   );
 }
 
